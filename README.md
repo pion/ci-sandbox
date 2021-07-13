@@ -1,2 +1,2 @@
 # ci-sandbox
-CI testing sandbox
+This repository is a CI testing sandbox.
