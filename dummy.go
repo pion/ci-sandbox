@@ -2,5 +2,9 @@
 package sandbox
 
 import (
-	_ "github.com/pion/transport/test"
+	"errors"
+
+	_ "github.com/pion/transport/test" // nolint
 )
+
+var ErrDummy = errors.New("dummy")
