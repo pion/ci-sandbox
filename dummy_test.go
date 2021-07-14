@@ -1,8 +1,9 @@
 package sandbox
 
 import (
-	_ "golang.org/x/net/nettest"
 	"testing"
+
+	_ "golang.org/x/net/nettest"
 )
 
 func TestDummy(t *testing.T) {

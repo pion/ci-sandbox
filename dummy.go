@@ -7,4 +7,5 @@ import (
 	_ "github.com/pion/transport/test" // nolint
 )
 
+// ErrDummy is a dummy.
 var ErrDummy = errors.New("dummy")
