@@ -17,6 +17,7 @@ on:
 jobs:
   checksecret:
     runs-on: ubuntu-latest
+    if: github.actor != 'Pion Bot'
     outputs:
       is_PIONBOT_PRIVATE_KEY_set: ${{ steps.checksecret_job.outputs.is_PIONBOT_PRIVATE_KEY_set }}
     steps:
@@ -29,14 +30,14 @@ jobs:
 
   generate-authors:
     needs: [checksecret]
-    if: needs.checksecret.outputs.is_PIONBOT_PRIVATE_KEY_set == 'true'
     runs-on: ubuntu-latest
+    if: github.actor != 'Pion Bot'
     steps:
     - uses: actions/checkout@v2
       with:
         ref: ${{ github.head_ref }}
         fetch-depth: 0
-        token: ${{ secrets.PIONBOT_PRIVATE_KEY }}
+        token: ${{ secrets.PIONBOT_PRIVATE_KEY || secrets.GITHUB_TOKEN  }}
 
     - name: Generate the authors file
       run: .github/generate-authors.sh
@@ -64,10 +65,20 @@ jobs:
         echo "::set-output name=msg::$(git status -s | wc -l)"
 
     - name: Commit and push
-      if: ${{ steps.git-status-output.outputs.msg != '0' }}
+      if: steps.git-status-output.outputs.msg != '0' && needs.checksecret.outputs.is_PIONBOT_PRIVATE_KEY_set == 'true'
       run: |
         git config user.email $(echo "${{ steps.last-commit-author.outputs.msg }}" | sed 's/\(.\+\) <\(\S\+\)>/\2/')
         git config user.name $(echo "${{ steps.last-commit-author.outputs.msg }}" | sed 's/\(.\+\) <\(\S\+\)>/\1/')
         git add AUTHORS.txt
         git commit --amend --no-edit
         git push --force https://github.com/${GITHUB_REPOSITORY} $(git symbolic-ref -q --short HEAD)
+
+    - uses: at-wat/setup-gh-pr-comment@v0
+      if: steps.git-status-output.outputs.msg != '0' && needs.checksecret.outputs.is_PIONBOT_PRIVATE_KEY_set == 'false'
+    - name: Notify updating AUTHORS.txt
+      if: steps.git-status-output.outputs.msg != '0' && needs.checksecret.outputs.is_PIONBOT_PRIVATE_KEY_set == 'false'
+      run: |
+        git diff | gh-pr-comment -stdin STDIN -overwrite-existing "Thank you for your contribution!" 'Do you mind updating AUTHORS.txt as following?
+        ```diff
+        STDIN
+        ```'
