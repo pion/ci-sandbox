@@ -15,28 +15,23 @@ on:
   pull_request:
 
 jobs:
-  checksecret:
-    runs-on: ubuntu-latest
-    outputs:
-      is_PIONBOT_PRIVATE_KEY_set: ${{ steps.checksecret_job.outputs.is_PIONBOT_PRIVATE_KEY_set }}
-    steps:
-      - id: checksecret_job
-        env:
-          PIONBOT_PRIVATE_KEY: ${{ secrets.PIONBOT_PRIVATE_KEY }}
-        run: |
-          echo "is_PIONBOT_PRIVATE_KEY_set: ${{ env.PIONBOT_PRIVATE_KEY != '' }}"
-          echo "::set-output name=is_PIONBOT_PRIVATE_KEY_set::${{ env.PIONBOT_PRIVATE_KEY != '' }}"
-
   generate-authors:
-    needs: [checksecret]
-    if: needs.checksecret.outputs.is_PIONBOT_PRIVATE_KEY_set == 'true'
     runs-on: ubuntu-latest
+    if: github.actor != 'pionbot'
     steps:
     - uses: actions/checkout@v2
+      if: "!github.pull_request.head.repo.fork"
       with:
         ref: ${{ github.head_ref }}
         fetch-depth: 0
         token: ${{ secrets.PIONBOT_PRIVATE_KEY }}
+    - uses: actions/checkout@v2
+      if: github.pull_request.head.repo.fork
+      with:
+        repository: ${{ github.pull_request.head.repo.full_name }}
+        ref: ${{ github.pull_request.head.ref }}
+        fetch-depth: 0
+        token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Generate the authors file
       run: .github/generate-authors.sh
@@ -64,10 +59,18 @@ jobs:
         echo "::set-output name=msg::$(git status -s | wc -l)"
 
     - name: Commit and push
-      if: ${{ steps.git-status-output.outputs.msg != '0' }}
+      if: "steps.git-status-output.outputs.msg != '0' && !github.pull_request.head.repo.fork"
       run: |
         git config user.email $(echo "${{ steps.last-commit-author.outputs.msg }}" | sed 's/\(.\+\) <\(\S\+\)>/\2/')
         git config user.name $(echo "${{ steps.last-commit-author.outputs.msg }}" | sed 's/\(.\+\) <\(\S\+\)>/\1/')
         git add AUTHORS.txt
         git commit --amend --no-edit
         git push --force https://github.com/${GITHUB_REPOSITORY} $(git symbolic-ref -q --short HEAD)
+
+    - name: Notify updating AUTHORS.txt
+      if: steps.git-status-output.outputs.msg != '0' && github.pull_request.head.repo.fork
+      run: |
+        patch="$(git diff)"
+        line=$(echo "${patch}" | sed -n '/^@@/s/@@ -\([0-9]\)\+,.*/\1/p' | head -n1)
+        code_block='```'
+        echo "::error file=AUTHORS.txt,line=${line},col=0::Thank you for your contribution @${{ github.actor }}!%0ADo you mind updating AUTHORS.txt as following?%0A${code_block}%0A${patch}%0A${code_block}\""
