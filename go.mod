@@ -1,6 +1,6 @@
 module github.com/pion/ci-sandbox
 
-go 1.15
+go 1.18
 
 require (
 	github.com/pion/transport v0.13.1
