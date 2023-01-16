@@ -14,7 +14,7 @@ name: generate-authors
 on:
   pull_request:
     branches-ignore:
-      - 'renovate/*'
+      - 'renovate/**'
 
 jobs:
   checksecret:
