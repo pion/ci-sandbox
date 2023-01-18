@@ -4,7 +4,7 @@ package sandbox
 import (
 	"errors"
 
-	_ "github.com/pion/transport/test" // nolint
+	_ "github.com/pion/transport/v2/test" // nolint
 )
 
 // ErrDummy is a dummy.
