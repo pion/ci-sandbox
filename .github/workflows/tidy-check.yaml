@@ -17,7 +17,7 @@ on:
       - master
 
 jobs:
-  check:
+  tidy:
     runs-on: ubuntu-latest
     uses: pion/.goassets/.github/workflows/tidy-check.reusable.yml@reuse-workflows-and-scripts
     with:

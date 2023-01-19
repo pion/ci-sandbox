@@ -18,7 +18,6 @@ on:
 
 jobs:
   test:
-    name: Go ${{ matrix.go }}
     uses: pion/.goassets/.github/workflows/test.reusable.yml@reuse-workflows-and-scripts
     strategy:
       matrix:
@@ -28,7 +27,6 @@ jobs:
       go-version: ${{ matrix.go }}
 
   test-i386:
-    name: Go i386 ${{ matrix.go }}
     uses: pion/.goassets/.github/workflows/test-i386.reusable.yml@reuse-workflows-and-scripts
     strategy:
       matrix:
@@ -38,7 +36,6 @@ jobs:
       go-version: ${{ matrix.go }}
 
   test-wasm:
-    name: WASM
     uses: pion/.goassets/.github/workflows/test-wasm.reusable.yml@reuse-workflows-and-scripts
     with:
       go-version: '1.19' # auto-update/latest-go-version
