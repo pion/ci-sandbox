@@ -14,6 +14,15 @@ SCRIPT_PATH=$(
   pwd -P
 )
 
-cp "${SCRIPT_PATH}/hooks/commit-msg.sh" "${SCRIPT_PATH}/../.git/hooks/commit-msg"
-cp "${SCRIPT_PATH}/hooks/pre-commit.sh" "${SCRIPT_PATH}/../.git/hooks/pre-commit"
-cp "${SCRIPT_PATH}/hooks/pre-push.sh" "${SCRIPT_PATH}/../.git/hooks/pre-push"
+GOASSETS_PATH="${SCRIPT_PATH}/.goassets"
+
+if [ -d "${GOASSETS_PATH}" ]; then
+  git -C "${GOASSETS_PATH}" checkout master
+  git -C "${GOASSETS_PATH}" pull origin master
+else
+  git clone --depth=1 https://github.com/pion/.goassets.git "${GOASSETS_PATH}"
+fi
+
+cp "${GOASSETS_PATH}/hooks/commit-msg.sh" "${SCRIPT_PATH}/../.git/hooks/commit-msg"
+cp "${GOASSETS_PATH}/hooks/pre-commit.sh" "${SCRIPT_PATH}/../.git/hooks/pre-commit"
+cp "${GOASSETS_PATH}/hooks/pre-push.sh" "${SCRIPT_PATH}/../.git/hooks/pre-push"
