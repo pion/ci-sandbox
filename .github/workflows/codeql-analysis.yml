@@ -23,4 +23,4 @@ on:
 
 jobs:
   analyze:
-    uses: pion/.goassets/.github/workflows/codeql-analysis.reusable.yml@master
+    uses: pion/.goassets/.github/workflows/codeql-analysis.reusable.yml@reuse-workflows-and-scripts

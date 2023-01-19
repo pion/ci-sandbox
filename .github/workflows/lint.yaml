@@ -15,4 +15,4 @@ on:
 
 jobs:
   lint:
-    uses: pion/.goassets/.github/workflows/lint.reusable.yml@master
+    uses: pion/.goassets/.github/workflows/lint.reusable.yml@reuse-workflows-and-scripts
