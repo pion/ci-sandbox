@@ -16,3 +16,5 @@ on:
 jobs:
   lint:
     uses: pion/.goassets/.github/workflows/lint.reusable.yml@reuse-workflows-and-scripts
+    with:
+      goassets-ref: reuse-workflows-and-scripts

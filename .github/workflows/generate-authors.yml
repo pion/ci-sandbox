@@ -19,3 +19,4 @@ jobs:
     uses: pion/.goassets/.github/workflows/generate-authors.reusable.yml@reuse-workflows-and-scripts
     with:
       token: ${{ secrets.PIONBOT_PRIVATE_KEY }}
+      goassets-ref: reuse-workflows-and-scripts
