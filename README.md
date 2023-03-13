@@ -3,9 +3,6 @@ This repository is a CI testing sandbox.
 
 **PLEASE KEEP RENOVATE PRs OPENED FOR TESTING**
 
-### Roadmap
-The repository is used as a part of our WebRTC implementation. Please refer to that [roadmap](https://github.com/pion/webrtc/issues/9) to track our major milestones.
-
 ### Community
 Pion has an active community on the [Slack](https://pion.ly/slack).
 
