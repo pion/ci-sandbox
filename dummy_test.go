@@ -6,5 +6,5 @@ import (
 	_ "golang.org/x/net/nettest"
 )
 
-func TestDummy(t *testing.T) {
+func TestDummy(*testing.T) {
 }
