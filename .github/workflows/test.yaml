@@ -20,22 +20,15 @@ on:
 
 jobs:
   test:
-    uses: pion/.goassets/.github/workflows/test.reusable.yml@master
+    uses: stv0g/.goassets/.github/workflows/test.reusable.yml@more-platforms
     strategy:
       matrix:
         go: ['1.20', '1.19'] # auto-update/supported-go-version-list
+        arch: ['i386', 'arm/v7', 'arm64/v8', 'amd64']
       fail-fast: false
     with:
       go-version: ${{ matrix.go }}
-
-  test-i386:
-    uses: pion/.goassets/.github/workflows/test-i386.reusable.yml@master
-    strategy:
-      matrix:
-        go: ['1.20', '1.19'] # auto-update/supported-go-version-list
-      fail-fast: false
-    with:
-      go-version: ${{ matrix.go }}
+      arch: ${{ matrix.arch }}
 
   test-wasm:
     uses: pion/.goassets/.github/workflows/test-wasm.reusable.yml@master
