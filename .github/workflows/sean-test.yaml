@@ -1,0 +1,36 @@
+# SPDX-FileCopyrightText: 2023 The Pion community <https://pion.ly>
+# SPDX-License-Identifier: MIT
+
+name: Sean Test
+
+on:
+  pull_request:
+
+jobs:
+  sean-test:
+    runs-on: ubuntu-latest
+    name: Sean Test
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build worker
+        run: |
+          docker build -t test_runner_i386:latest -<<EOF
+          FROM i386/golang:1.21-alpine
+          RUN go install github.com/gotesttools/gotestfmt/v2/cmd/gotestfmt@latest
+          EOF
+
+
+      - name: Run test
+        run: |
+          mkdir -p $HOME/go/pkg/mod $HOME/.cache
+          docker run \
+            -u $(id -u):$(id -g) \
+            -e "GO111MODULE=on" \
+            -e "CGO_ENABLED=0" \
+            -v $GITHUB_WORKSPACE:/go/src/github.com/pion/$(basename $GITHUB_WORKSPACE) \
+            -v $HOME/go/pkg/mod:/go/pkg/mod \
+            -v $HOME/.cache:/.cache \
+            -w /go/src/github.com/pion/$(basename $GITHUB_WORKSPACE) \
+            test_runner_i386:latest \
+            /bin/sh -c "/usr/local/go/bin/go test ${TEST_EXTRA_ARGS:-} -json -v ./... | gotestfmt"
