@@ -6,6 +6,8 @@
 Atsushi Watanabe <atsushi.w@ieee.org>
 Daniele Sluijters <daenney@users.noreply.github.com>
 Steffen Vogel <post@steffenvogel.de>
+Sean <sean@pion.ly>
+Sean DuBois <sean@pion.ly>
 
 # List of contributors not appearing in Git history
 
