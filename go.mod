@@ -4,5 +4,5 @@ go 1.15
 
 require (
 	github.com/pion/transport/v3 v3.0.1
-	golang.org/x/net v0.17.0
+	golang.org/x/net v0.19.0
 )
