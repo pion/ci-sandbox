@@ -15,5 +15,5 @@ var ErrDummy = errors.New("dummy")
 
 // PublicAPI is a dummy public API definition.
 type PublicAPI struct {
-	PublicMember int
+	PublicMember bool
 }
