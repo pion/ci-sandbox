@@ -4,10 +4,12 @@
 package sandbox
 
 import (
+	"fmt"
 	"testing"
 
 	_ "golang.org/x/net/nettest"
 )
 
 func TestDummy(*testing.T) {
+	fmt.Println("test")
 }
