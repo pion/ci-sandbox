@@ -20,17 +20,16 @@ on:
 
 jobs:
   test:
-    uses: pion/.goassets/.github/workflows/test.reusable.yml@master
+    uses: pion/.goassets/.github/workflows/test.reusable.yml@codecov-token-test
     strategy:
       matrix:
         go: ["1.22", "1.21"] # auto-update/supported-go-version-list
       fail-fast: false
     with:
       go-version: ${{ matrix.go }}
-      codecov-token: ${{ env.CODECOV_TOKEN }}
 
   test-i386:
-    uses: pion/.goassets/.github/workflows/test-i386.reusable.yml@master
+    uses: pion/.goassets/.github/workflows/test-i386.reusable.yml@codecov-token-test
     strategy:
       matrix:
         go: ["1.22", "1.21"] # auto-update/supported-go-version-list
@@ -39,7 +38,6 @@ jobs:
       go-version: ${{ matrix.go }}
 
   test-wasm:
-    uses: pion/.goassets/.github/workflows/test-wasm.reusable.yml@master
+    uses: pion/.goassets/.github/workflows/test-wasm.reusable.yml@codecov-token-test
     with:
       go-version: "1.22" # auto-update/latest-go-version
-      codecov-token: ${{ env.CODECOV_TOKEN }}
