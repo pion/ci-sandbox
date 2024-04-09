@@ -17,3 +17,14 @@ var ErrDummy = errors.New("dummy")
 type PublicAPI struct {
 	PublicMember int
 }
+
+func (p *PublicAPI) PublicFunc() {
+	println("Running PublicAPI.PublicFunc")
+	println("PublicAPI.PublicMember: ", p.PublicMember)
+	if p.PublicMember == 1 {
+		println("PublicAPI.PublicMember is one")
+	}
+	if p.PublicMember != 1 {
+		println("PublicAPI.PublicMember is not one")
+	}
+}
