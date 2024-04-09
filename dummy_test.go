@@ -10,4 +10,6 @@ import (
 )
 
 func TestDummy(*testing.T) {
+	p := &PublicAPI{}
+	p.PublicFunc()
 }
