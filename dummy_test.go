@@ -4,6 +4,7 @@
 package sandbox
 
 import (
+	"fmt"
 	"testing"
 
 	_ "golang.org/x/net/nettest"
@@ -12,4 +13,5 @@ import (
 func TestDummy(*testing.T) {
 	p := &PublicAPI{}
 	p.PublicFunc()
+	fmt.Println("test")
 }
