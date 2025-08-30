@@ -13,5 +13,5 @@ import (
 func TestDummy(*testing.T) {
 	p := &PublicAPI{}
 	p.PublicFunc()
-	fmt.Println("test")
+	fmt.Println("test 2")
 }

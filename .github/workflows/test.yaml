@@ -41,5 +41,5 @@ jobs:
   test-wasm:
     uses: pion/.goassets/.github/workflows/test-wasm.reusable.yml@master
     with:
-      go-version: "1.23" # auto-update/latest-go-version
+      go-version: "1.25" # auto-update/latest-go-version
     secrets: inherit
