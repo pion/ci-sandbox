@@ -28,7 +28,7 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v6
         with:
-          go-version: "latest"
+          go-version: '1.25'
 
       - name: Setup go-acc
         run: go install github.com/ory/go-acc@latest
@@ -54,7 +54,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: test-log-latest
+          name: test-log-1.25
           path: /tmp/gotest.log
           if-no-files-found: error
 
