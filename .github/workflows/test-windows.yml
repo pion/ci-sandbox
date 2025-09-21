@@ -12,24 +12,55 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Go
-        uses: actions/setup-go@v5
+      - uses: actions/checkout@v5
         with:
-          go-version: '1.23'   # or 'stable' to always get the latest stable Go
+          fetch-depth: 0
 
-      - name: Cache Go modules
-        uses: actions/cache@v4
+      - uses: actions/cache@v4
         with:
           path: |
             ~/go/pkg/mod
-            ~/.cache/go-build
-          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-go-
+            ~/go/bin
+            ~/.cache
+          key: ${{ runner.os }}-amd64-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: ${{ runner.os }}-amd64-go-
 
-      - name: Run tests
-        run: go test ./...
+      - name: Setup Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: "latest"
 
+      - name: Setup go-acc
+        run: go install github.com/ory/go-acc@latest
+
+      - name: Run pre test hook
+        run: |
+          if [ -f .github/.ci.conf ]; then . .github/.ci.conf; fi
+          if [ -n "${PRE_TEST_HOOK}" ]; then ${PRE_TEST_HOOK}; fi
+
+      - name: Run test
+        run: |
+          if [ -f .github/.ci.conf ]; then . .github/.ci.conf; fi
+
+          set -euo pipefail
+          go-acc -o cover.out ./... -- -bench=. -v -race 2>&1 | tee /tmp/gotest.log
+
+      - name: Run post test hook
+        run: |
+          if [ -f .github/.ci.conf ]; then . .github/.ci.conf; fi
+          if [ -n "${POST_TEST_HOOK}" ]; then ${POST_TEST_HOOK}; fi
+
+      - name: Upload test log
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-log-latest
+          path: /tmp/gotest.log
+          if-no-files-found: error
+
+      - uses: codecov/codecov-action@v5
+        with:
+          fail_ci_if_error: true
+          flags: go
+          name: codecov-umbrella
+          token: ${{ secrets.CODECOV_TOKEN }}
