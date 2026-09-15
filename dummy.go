@@ -8,7 +8,7 @@ import (
 	"errors"
 	"log"
 
-	_ "github.com/pion/transport/v4/test" // nolint
+	_ "github.com/pion/transport/v5/test" // nolint
 )
 
 // ErrDummy is a dummy.
